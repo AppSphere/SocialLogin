@@ -1,0 +1,7 @@
+{
+  "name": "Results Framework",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
