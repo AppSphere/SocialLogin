@@ -46,4 +46,22 @@ export class AuthService {
     }
 
 
+
+    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
+    register(formData) {
+      const endPoint = environment.apiEndPoint + '/Account/Create';
+
+      const headers = {
+        'Content-Type': 'application/json'
+      };
+
+      return this.http.http.post(
+        endPoint,
+        formData,
+        headers
+
+      );
+    }
+
+
 }
