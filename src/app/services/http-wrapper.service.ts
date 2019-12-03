@@ -25,16 +25,16 @@ export class HttpWrapperService {
   public post = (url: string, body: any, options?: any): Observable<any> => {
     options = this.prepareOptions(options);
 
-    return of(this.http.post(url, body, options)).pipe(tap((res) => {
-      this.hideLoader();
+    return of(this.http.post(url, body, options.headers)).pipe(tap((res) => {
+      // this.hideLoader();
     }), finalize(() => {
-      this.hideLoader();
+      // this.hideLoader();
     }));
 
   }
 
   public prepareOptions(options: any): any {
-    this.showLoader();
+    // this.showLoader();
     const token = null;
     options = options || {};
 
@@ -58,7 +58,7 @@ export class HttpWrapperService {
     if (!options.headers['Accept']) {
       options.headers['Accept'] = 'application/json';
     }
-    options.headers = new HttpHeaders(options.headers);
+    // options.headers = new HttpHeaders(options.headers);
     return options;
   }
 
