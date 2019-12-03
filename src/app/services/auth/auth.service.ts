@@ -1,15 +1,19 @@
-import { HttpHeaders } from '@angular/common/http';
+import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 
 import { environment } from 'src/environments/environment';
 import { HttpProvider } from 'src/app/providers/http/http';
+import { TokenResponse } from 'src/app/viewmodels/token-response';
+import { HttpWrapperService } from '../http-wrapper.service'
+import { map, catchError } from 'rxjs/operators';
+import { of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpProvider) {}
+  constructor(private http: HttpWrapperService) {}
 
 
   // API End Point /Account/login/facebook
@@ -23,10 +27,6 @@ export class AuthService {
 
     };
 
-    return this.http.http.post(
-      endPoint,
-      request
-    );
   }
 
     // API End Point /Account/login/google (We should remove Redundant Calls If Required)
@@ -36,13 +36,10 @@ export class AuthService {
         token: accessToken,
         deviceId: deviceId,
         deviceName: deviceName
-  
+
       };
-  
-      return this.http.http.post(
-        endPoint,
-        request
-      );
+
+    
     }
 
 
@@ -51,15 +48,13 @@ export class AuthService {
     register(formData) {
       const endPoint = environment.apiEndPoint + '/Account/Create';
 
-      const headers = {
-        'Content-Type': 'application/json'
-      };
-
-      return this.http.http.post(
-        endPoint,
-        formData,
-        headers
-
+      return this.http.post(endPoint, formData).pipe(
+        map((res: TokenResponse) => {
+          return res;
+        }),
+        catchError((err) => {
+               return of(err);
+        })
       );
     }
 
