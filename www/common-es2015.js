@@ -679,6 +679,250 @@ const findCheckedOption = (el, tagName) => {
 
 
 
+/***/ }),
+
+/***/ "./src/app/services/auth/auth.service.ts":
+/*!***********************************************!*\
+  !*** ./src/app/services/auth/auth.service.ts ***!
+  \***********************************************/
+/*! exports provided: AuthService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _http_wrapper_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../http-wrapper.service */ "./src/app/services/http-wrapper.service.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+
+
+
+
+
+
+let AuthService = class AuthService {
+    constructor(http) {
+        this.http = http;
+    }
+    // API End Point /Account/login/facebook
+    loginWithFacebook(accessToken, deviceId, deviceName) {
+        const endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/login/facebook';
+        const request = {
+            token: accessToken,
+            deviceId: deviceId,
+            deviceName: deviceName
+        };
+    }
+    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
+    loginWithGoogle(accessToken, deviceId, deviceName) {
+        const endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/login/google';
+        const request = {
+            token: accessToken,
+            deviceId: deviceId,
+            deviceName: deviceName
+        };
+    }
+    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
+    register(formData) {
+        const endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/Create';
+        return this.http.post(endPoint, formData).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])((res) => {
+            return res;
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])((err) => {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["of"])(err);
+        }));
+    }
+};
+AuthService.ctorParameters = () => [
+    { type: _http_wrapper_service__WEBPACK_IMPORTED_MODULE_3__["HttpWrapperService"] }
+];
+AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_http_wrapper_service__WEBPACK_IMPORTED_MODULE_3__["HttpWrapperService"]])
+], AuthService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/http-wrapper.service.ts":
+/*!**************************************************!*\
+  !*** ./src/app/services/http-wrapper.service.ts ***!
+  \**************************************************/
+/*! exports provided: HttpWrapperService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpWrapperService", function() { return HttpWrapperService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm2015/operators/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm2015/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm2015/index.js");
+/* harmony import */ var _loader_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./loader.service */ "./src/app/services/loader.service.ts");
+
+
+
+
+
+
+let HttpWrapperService = class HttpWrapperService {
+    constructor(http, loaderService) {
+        this.http = http;
+        this.loaderService = loaderService;
+        this.get = (url, params, options) => {
+            options = this.prepareOptions(options);
+            options.params = params;
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["of"])(this.http.get(url, options)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])((res) => {
+                this.hideLoader();
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(() => {
+                this.hideLoader();
+            }));
+        };
+        this.post = (url, body, options) => {
+            options = this.prepareOptions(options);
+            return this.http.post(url, body, options).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])((res) => {
+                // this.hideLoader();
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(() => {
+                // this.hideLoader();
+            }));
+        };
+    }
+    prepareOptions(options) {
+        // this.showLoader();
+        const token = null;
+        options = options || {};
+        if (!options.headers) {
+            options.headers = {};
+        }
+        if (token) {
+            options.headers['Authorization'] = `Bearer ${token}`;
+        }
+        // options.withCredentials = true;
+        options.headers['Accept-Language'] = 'en-Us';
+        options.headers['cache-control'] = 'no-cache';
+        if (!options.headers['Content-Type']) {
+            options.headers['Content-Type'] = 'application/json';
+        }
+        if (options.headers['Content-Type'] === 'multipart/form-data') {
+            delete options.headers['Content-Type'];
+        }
+        if (!options.headers['Accept']) {
+            options.headers['Accept'] = 'application/json';
+        }
+        options.headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpHeaders"](options.headers);
+        return options;
+    }
+    showLoader() {
+        this.loaderService.show();
+    }
+    hideLoader() {
+        this.loaderService.hide();
+    }
+};
+HttpWrapperService.ctorParameters = () => [
+    { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] },
+    { type: _loader_service__WEBPACK_IMPORTED_MODULE_5__["LoaderService"] }
+];
+HttpWrapperService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"], _loader_service__WEBPACK_IMPORTED_MODULE_5__["LoaderService"]])
+], HttpWrapperService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/loader.service.ts":
+/*!********************************************!*\
+  !*** ./src/app/services/loader.service.ts ***!
+  \********************************************/
+/*! exports provided: LoaderService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoaderService", function() { return LoaderService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm2015/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+
+
+
+let LoaderService = class LoaderService {
+    constructor(loader) {
+        this.loader = loader;
+    }
+    show() {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function* () {
+            const loader = yield this.loader.create();
+            yield loader.present();
+        });
+    }
+    hide() {
+        this.loader.dismiss();
+    }
+};
+LoaderService.ctorParameters = () => [
+    { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"] }
+];
+LoaderService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+    Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+        providedIn: 'root'
+    }),
+    tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"]])
+], LoaderService);
+
+
+
+/***/ }),
+
+/***/ "./src/app/validators/password.validator.ts":
+/*!**************************************************!*\
+  !*** ./src/app/validators/password.validator.ts ***!
+  \**************************************************/
+/*! exports provided: PasswordValidator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PasswordValidator", function() { return PasswordValidator; });
+class PasswordValidator {
+    // Inspired on: http://plnkr.co/edit/Zcbg2T3tOxYmhxs7vaAm?p=preview
+    static areEqual(formGroup) {
+        let val;
+        let valid = true;
+        for (const key in formGroup.controls) {
+            if (formGroup.controls.hasOwnProperty(key)) {
+                const control = formGroup.controls[key];
+                if (val === undefined) {
+                    val = control.value;
+                }
+                else {
+                    if (val !== control.value) {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (valid) {
+            return null;
+        }
+        return {
+            areEqual: true
+        };
+    }
+}
+
+
 /***/ })
 
 }]);

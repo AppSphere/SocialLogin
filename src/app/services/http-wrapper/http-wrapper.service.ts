@@ -2,8 +2,8 @@ import {Injectable} from '@angular/core';
 import {finalize, tap} from 'rxjs/operators';
 import {HttpClient, HttpHeaders} from '@angular/common/http';
 import {Observable, of} from 'rxjs';
-import {LoaderService} from './loader.service';
 import {HTTP} from '@ionic-native/http/ngx';
+import { LoaderService } from '../loader/loader.service';
 
 @Injectable({
     providedIn: 'root'

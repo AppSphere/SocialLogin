@@ -30,10 +30,14 @@ let config = new AuthServiceConfig([
   }
 ]);
 
+export function provideConfig() {
+  return config;
+}
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule, IonicModule.forRoot(), SocialLoginModule.initialize(config), AppRoutingModule, HttpModule, HttpClientModule],
+  imports: [BrowserModule, IonicModule.forRoot(), SocialLoginModule, AppRoutingModule, HttpModule, HttpClientModule],
   providers: [
     StatusBar,
     SplashScreen,
@@ -44,7 +48,14 @@ let config = new AuthServiceConfig([
     Facebook,
     HttpAngularProvider,
     HttpNativeProvider,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    {
+      provide: RouteReuseStrategy,
+      useClass: IonicRouteStrategy
+    },
+    {
+      provide: AuthServiceConfig,
+      useFactory: provideConfig
+    }
   ],
   bootstrap: [AppComponent]
 })

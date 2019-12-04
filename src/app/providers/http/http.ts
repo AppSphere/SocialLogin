@@ -9,7 +9,6 @@ export class HttpProvider {
     public http;
 
     constructor(private platform: Platform, private angularHttp: HttpAngularProvider, private nativeHttp: HttpNativeProvider) {
-        debugger;
         this.http = this.platform.is('ios') || this.platform.is('android') ? nativeHttp : angularHttp;
     }
 }

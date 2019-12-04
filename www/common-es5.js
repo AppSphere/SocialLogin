@@ -401,6 +401,268 @@ var findCheckedOption = function (el, tagName) {
 
 
 
+/***/ }),
+
+/***/ "./src/app/services/auth/auth.service.ts":
+/*!***********************************************!*\
+  !*** ./src/app/services/auth/auth.service.ts ***!
+  \***********************************************/
+/*! exports provided: AuthService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
+/* harmony import */ var _http_wrapper_service__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../http-wrapper.service */ "./src/app/services/http-wrapper.service.ts");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+
+
+
+
+
+
+var AuthService = /** @class */ (function () {
+    function AuthService(http) {
+        this.http = http;
+    }
+    // API End Point /Account/login/facebook
+    AuthService.prototype.loginWithFacebook = function (accessToken, deviceId, deviceName) {
+        var endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/login/facebook';
+        var request = {
+            token: accessToken,
+            deviceId: deviceId,
+            deviceName: deviceName
+        };
+    };
+    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
+    AuthService.prototype.loginWithGoogle = function (accessToken, deviceId, deviceName) {
+        var endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/login/google';
+        var request = {
+            token: accessToken,
+            deviceId: deviceId,
+            deviceName: deviceName
+        };
+    };
+    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
+    AuthService.prototype.register = function (formData) {
+        var endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/Create';
+        return this.http.post(endPoint, formData).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["map"])(function (res) {
+            return res;
+        }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_4__["catchError"])(function (err) {
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_5__["of"])(err);
+        }));
+    };
+    AuthService.ctorParameters = function () { return [
+        { type: _http_wrapper_service__WEBPACK_IMPORTED_MODULE_3__["HttpWrapperService"] }
+    ]; };
+    AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_http_wrapper_service__WEBPACK_IMPORTED_MODULE_3__["HttpWrapperService"]])
+    ], AuthService);
+    return AuthService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/http-wrapper.service.ts":
+/*!**************************************************!*\
+  !*** ./src/app/services/http-wrapper.service.ts ***!
+  \**************************************************/
+/*! exports provided: HttpWrapperService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "HttpWrapperService", function() { return HttpWrapperService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var rxjs_operators__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! rxjs/operators */ "./node_modules/rxjs/_esm5/operators/index.js");
+/* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var rxjs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! rxjs */ "./node_modules/rxjs/_esm5/index.js");
+/* harmony import */ var _loader_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./loader.service */ "./src/app/services/loader.service.ts");
+
+
+
+
+
+
+var HttpWrapperService = /** @class */ (function () {
+    function HttpWrapperService(http, loaderService) {
+        var _this = this;
+        this.http = http;
+        this.loaderService = loaderService;
+        this.get = function (url, params, options) {
+            options = _this.prepareOptions(options);
+            options.params = params;
+            return Object(rxjs__WEBPACK_IMPORTED_MODULE_4__["of"])(_this.http.get(url, options)).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])(function (res) {
+                _this.hideLoader();
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
+                _this.hideLoader();
+            }));
+        };
+        this.post = function (url, body, options) {
+            options = _this.prepareOptions(options);
+            return _this.http.post(url, body, options).pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["tap"])(function (res) {
+                // this.hideLoader();
+            }), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_2__["finalize"])(function () {
+                // this.hideLoader();
+            }));
+        };
+    }
+    HttpWrapperService.prototype.prepareOptions = function (options) {
+        // this.showLoader();
+        var token = null;
+        options = options || {};
+        if (!options.headers) {
+            options.headers = {};
+        }
+        if (token) {
+            options.headers['Authorization'] = "Bearer " + token;
+        }
+        // options.withCredentials = true;
+        options.headers['Accept-Language'] = 'en-Us';
+        options.headers['cache-control'] = 'no-cache';
+        if (!options.headers['Content-Type']) {
+            options.headers['Content-Type'] = 'application/json';
+        }
+        if (options.headers['Content-Type'] === 'multipart/form-data') {
+            delete options.headers['Content-Type'];
+        }
+        if (!options.headers['Accept']) {
+            options.headers['Accept'] = 'application/json';
+        }
+        options.headers = new _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpHeaders"](options.headers);
+        return options;
+    };
+    HttpWrapperService.prototype.showLoader = function () {
+        this.loaderService.show();
+    };
+    HttpWrapperService.prototype.hideLoader = function () {
+        this.loaderService.hide();
+    };
+    HttpWrapperService.ctorParameters = function () { return [
+        { type: _angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"] },
+        { type: _loader_service__WEBPACK_IMPORTED_MODULE_5__["LoaderService"] }
+    ]; };
+    HttpWrapperService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_angular_common_http__WEBPACK_IMPORTED_MODULE_3__["HttpClient"], _loader_service__WEBPACK_IMPORTED_MODULE_5__["LoaderService"]])
+    ], HttpWrapperService);
+    return HttpWrapperService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/services/loader.service.ts":
+/*!********************************************!*\
+  !*** ./src/app/services/loader.service.ts ***!
+  \********************************************/
+/*! exports provided: LoaderService */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "LoaderService", function() { return LoaderService; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+/* harmony import */ var _ionic_angular__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @ionic/angular */ "./node_modules/@ionic/angular/dist/fesm5.js");
+
+
+
+var LoaderService = /** @class */ (function () {
+    function LoaderService(loader) {
+        this.loader = loader;
+    }
+    LoaderService.prototype.show = function () {
+        return tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"](this, void 0, void 0, function () {
+            var loader;
+            return tslib__WEBPACK_IMPORTED_MODULE_0__["__generator"](this, function (_a) {
+                switch (_a.label) {
+                    case 0: return [4 /*yield*/, this.loader.create()];
+                    case 1:
+                        loader = _a.sent();
+                        return [4 /*yield*/, loader.present()];
+                    case 2:
+                        _a.sent();
+                        return [2 /*return*/];
+                }
+            });
+        });
+    };
+    LoaderService.prototype.hide = function () {
+        this.loader.dismiss();
+    };
+    LoaderService.ctorParameters = function () { return [
+        { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"] }
+    ]; };
+    LoaderService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
+            providedIn: 'root'
+        }),
+        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [_ionic_angular__WEBPACK_IMPORTED_MODULE_2__["LoadingController"]])
+    ], LoaderService);
+    return LoaderService;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/validators/password.validator.ts":
+/*!**************************************************!*\
+  !*** ./src/app/validators/password.validator.ts ***!
+  \**************************************************/
+/*! exports provided: PasswordValidator */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "PasswordValidator", function() { return PasswordValidator; });
+var PasswordValidator = /** @class */ (function () {
+    function PasswordValidator() {
+    }
+    // Inspired on: http://plnkr.co/edit/Zcbg2T3tOxYmhxs7vaAm?p=preview
+    PasswordValidator.areEqual = function (formGroup) {
+        var val;
+        var valid = true;
+        for (var key in formGroup.controls) {
+            if (formGroup.controls.hasOwnProperty(key)) {
+                var control = formGroup.controls[key];
+                if (val === undefined) {
+                    val = control.value;
+                }
+                else {
+                    if (val !== control.value) {
+                        valid = false;
+                        break;
+                    }
+                }
+            }
+        }
+        if (valid) {
+            return null;
+        }
+        return {
+            areEqual: true
+        };
+    };
+    return PasswordValidator;
+}());
+
+
+
 /***/ })
 
 }]);

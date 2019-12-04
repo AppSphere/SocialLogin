@@ -558,7 +558,7 @@ exports.utils = {
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-header>\n  <ion-toolbar>\n    <ion-title>login</ion-title>\n  </ion-toolbar>\n</ion-header>\n\n<ion-content>\n\n  <ion-button expand=\"full\" class=\"linkedin-button\" (click)=\"linkedInLogin()\">\n    <ion-icon name=\"logo-linkedin\" float-left></ion-icon>Linkedin\n</ion-button>\n<ion-button expand=\"full\" class=\"google-button\" (click)=\"signInWithGoogle()\">\n  <ion-icon name=\"logo-google\" float-left></ion-icon>Google\n</ion-button>\n<ion-button expand=\"full\" class=\"google-button\" (click)=\"signInWithFB()\">\n  <ion-icon name=\"logo-facebook\" float-left></ion-icon>Facebook\n</ion-button>\n</ion-content>\n"
+module.exports = "<!-- <ion-header>\r\n  <ion-toolbar>\r\n    <ion-title>\r\n      Login\r\n    </ion-title>\r\n  </ion-toolbar>\r\n</ion-header> -->\r\n<ion-content>\r\n\r\n  <ion-grid style=\"height: 100%;\">\r\n    <ion-row align-items-center style=\"height: 100%;\">\r\n      <ion-col>\r\n\r\n\r\n\r\n        <form class=\"form\" [formGroup]=\"validationsForms\" (ngSubmit)=\"login(validationsForms.value)\">\r\n          <ion-grid>\r\n            <ion-row color=\"primary\" justify-content-center>\r\n              <ion-col align-self-center size-md=\"6\" size-lg=\"5\" size-xs=\"12\">\r\n                <div text-center>\r\n                  <h3>Login to Results Framework</h3>\r\n                </div>\r\n                <div padding>\r\n                  <ion-item>\r\n                    <ion-input formControlName=\"email\" type=\"email\" placeholder=\"your@email.com\" required></ion-input>\r\n                  </ion-item>\r\n                  <ion-item>\r\n                    <ion-input formControlName=\"password\" type=\"password\" placeholder=\"Password\" required></ion-input>\r\n                  </ion-item>\r\n                  <div class=\"validation-errors\">\r\n                    <ng-container *ngFor=\"let validation of validationMessages.password\">\r\n                      <div class=\"error-message\"\r\n                        *ngIf=\"validationsForms.get('password').hasError(validation.type) && (validationsForms.get('password').dirty || validationsForms.get('password').touched)\">\r\n                        {{ validation.message }}\r\n                      </div>\r\n                    </ng-container>\r\n                  </div>\r\n                </div>\r\n                <div padding>\r\n                  <ion-button size=\"large\" type=\"submit\" [disabled]=\"!validationsForms.valid\" expand=\"block\">Login\r\n                  </ion-button>\r\n                </div>\r\n              </ion-col>\r\n            </ion-row>\r\n          </ion-grid>\r\n        </form>\r\n        <ion-grid>\r\n          <ion-row>\r\n            <ion-col text-center>\r\n              <a [routerLink]=\"'/register'\">Register</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;\r\n              <a [routerLink]=\"'/reset-password'\">Forgot Password</a>\r\n            </ion-col>\r\n          </ion-row>\r\n          <ion-row color=\"primary\" justify-content-center>\r\n            <ion-col align-self-center size-md=\"6\" size-lg=\"5\" size-xs=\"12\" text-center>\r\n              <ion-button fill=\"clear\" size=\"large\" (click)=\"linkedInLogin()\">\r\n                <ion-icon slot=\"icon-only\" name=\"logo-linkedin\"></ion-icon>\r\n              </ion-button>\r\n              <ion-button fill=\"clear\" size=\"large\" (click)=\"signInWithGoogle()\">\r\n                <ion-icon slot=\"icon-only\" name=\"logo-google\"></ion-icon>\r\n              </ion-button>\r\n              <ion-button fill=\"clear\" size=\"large\" (click)=\"signInWithFB()\">\r\n                <ion-icon slot=\"icon-only\" name=\"logo-facebook\"></ion-icon>\r\n              </ion-button>\r\n            </ion-col>\r\n          </ion-row>\r\n        </ion-grid>\r\n\r\n\r\n      </ion-col>\r\n    </ion-row>\r\n  </ion-grid>\r\n\r\n\r\n\r\n</ion-content>\r\n"
 
 /***/ }),
 
@@ -634,6 +634,7 @@ var LoginPageModule = /** @class */ (function () {
             imports: [
                 _angular_common__WEBPACK_IMPORTED_MODULE_2__["CommonModule"],
                 _angular_forms__WEBPACK_IMPORTED_MODULE_3__["FormsModule"],
+                _angular_forms__WEBPACK_IMPORTED_MODULE_3__["ReactiveFormsModule"],
                 _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"],
                 _login_routing_module__WEBPACK_IMPORTED_MODULE_5__["LoginPageRoutingModule"]
             ],
@@ -682,6 +683,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @ionic-native/google-plus/ngx */ "./node_modules/@ionic-native/google-plus/ngx/index.js");
 /* harmony import */ var _ionic_native_facebook_ngx__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @ionic-native/facebook/ngx */ "./node_modules/@ionic-native/facebook/ngx/index.js");
 /* harmony import */ var src_app_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! src/app/services/auth/auth.service */ "./src/app/services/auth/auth.service.ts");
+/* harmony import */ var _angular_forms__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @angular/forms */ "./node_modules/@angular/forms/fesm5/forms.js");
+
 
 
 
@@ -694,7 +697,7 @@ __webpack_require__.r(__webpack_exports__);
 
 
 var LoginPage = /** @class */ (function () {
-    function LoginPage(alertController, loadingController, platform, linkedinService, auth, navCtrl, googlePlus, fb, localAuthService) {
+    function LoginPage(alertController, loadingController, platform, linkedinService, auth, navCtrl, googlePlus, fb, localAuthService, formBuilder) {
         this.alertController = alertController;
         this.loadingController = loadingController;
         this.platform = platform;
@@ -704,8 +707,59 @@ var LoginPage = /** @class */ (function () {
         this.googlePlus = googlePlus;
         this.fb = fb;
         this.localAuthService = localAuthService;
+        this.formBuilder = formBuilder;
     }
-    LoginPage.prototype.ngOnInit = function () { };
+    LoginPage.prototype.ngOnInit = function () {
+        this.validationsForms = this.formBuilder.group({
+            email: new _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormControl"]('', _angular_forms__WEBPACK_IMPORTED_MODULE_11__["Validators"].compose([
+                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["Validators"].required,
+                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["Validators"].pattern('^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+.[a-zA-Z0-9-.]+$')
+            ])),
+            password: new _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormControl"]('', _angular_forms__WEBPACK_IMPORTED_MODULE_11__["Validators"].compose([
+                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["Validators"].minLength(6),
+                _angular_forms__WEBPACK_IMPORTED_MODULE_11__["Validators"].required
+            ])),
+        });
+        this.validationMessages = {
+            username: [
+                { type: 'required', message: 'Username is required.' },
+                { type: 'minlength', message: 'Username must be at least 5 characters long.' },
+                { type: 'maxlength', message: 'Username cannot be more than 25 characters long.' },
+                { type: 'pattern', message: 'Your username must contain only numbers and letters.' },
+                { type: 'validUsername', message: 'Your username has already been taken.' }
+            ],
+            name: [
+                { type: 'required', message: 'Name is required.' }
+            ],
+            lastname: [
+                { type: 'required', message: 'Last name is required.' }
+            ],
+            email: [
+                { type: 'required', message: 'Email is required.' },
+                { type: 'pattern', message: 'Enter a valid email.' }
+            ],
+            phone: [
+                { type: 'required', message: 'Phone is required.' },
+                { type: 'validCountryPhone', message: 'Phone incorrect for the country selected' }
+            ],
+            password: [
+                { type: 'required', message: 'Password is required.' },
+                { type: 'minlength', message: 'Password must be at least 5 characters long.' },
+                { type: 'pattern', message: 'Your password must contain at least one uppercase, one lowercase, and one number.' }
+            ],
+            confirm: [
+                { type: 'required', message: 'Confirm password is required' }
+            ],
+            matchingPasswords: [
+                { type: 'areEqual', message: 'Password mismatch' }
+            ],
+            terms: [
+                { type: 'pattern', message: 'You must accept terms and conditions.' }
+            ],
+        };
+    };
+    LoginPage.prototype.login = function (data) {
+    };
     LoginPage.prototype.linkedInLogin = function () {
         var _this = this;
         this.presentLoading();
@@ -721,11 +775,9 @@ var LoginPage = /** @class */ (function () {
             oauth
                 .logInVia(provider)
                 .then(function (success) {
-                debugger;
                 _this.linkedinService.getAccessToken(success['code'])
                     .then(function (data) {
                     alert('data' + data);
-                    debugger;
                 });
             })
                 .catch(function (err) {
@@ -791,7 +843,8 @@ var LoginPage = /** @class */ (function () {
         { type: _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"] },
         { type: _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_8__["GooglePlus"] },
         { type: _ionic_native_facebook_ngx__WEBPACK_IMPORTED_MODULE_9__["Facebook"] },
-        { type: src_app_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_10__["AuthService"] }
+        { type: src_app_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_10__["AuthService"] },
+        { type: _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormBuilder"] }
     ]; };
     LoginPage = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Component"])({
@@ -807,67 +860,10 @@ var LoginPage = /** @class */ (function () {
             _ionic_angular__WEBPACK_IMPORTED_MODULE_2__["NavController"],
             _ionic_native_google_plus_ngx__WEBPACK_IMPORTED_MODULE_8__["GooglePlus"],
             _ionic_native_facebook_ngx__WEBPACK_IMPORTED_MODULE_9__["Facebook"],
-            src_app_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_10__["AuthService"]])
+            src_app_services_auth_auth_service__WEBPACK_IMPORTED_MODULE_10__["AuthService"],
+            _angular_forms__WEBPACK_IMPORTED_MODULE_11__["FormBuilder"]])
     ], LoginPage);
     return LoginPage;
-}());
-
-
-
-/***/ }),
-
-/***/ "./src/app/services/auth/auth.service.ts":
-/*!***********************************************!*\
-  !*** ./src/app/services/auth/auth.service.ts ***!
-  \***********************************************/
-/*! exports provided: AuthService */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthService", function() { return AuthService; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
-/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
-/* harmony import */ var src_environments_environment__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! src/environments/environment */ "./src/environments/environment.ts");
-/* harmony import */ var src_app_providers_http_http__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! src/app/providers/http/http */ "./src/app/providers/http/http.ts");
-
-
-
-
-var AuthService = /** @class */ (function () {
-    function AuthService(http) {
-        this.http = http;
-    }
-    // API End Point /Account/login/facebook
-    AuthService.prototype.loginWithFacebook = function (accessToken, deviceId, deviceName) {
-        var endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/login/facebook';
-        var request = {
-            token: accessToken,
-            deviceId: deviceId,
-            deviceName: deviceName
-        };
-        return this.http.http.post(endPoint, request);
-    };
-    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
-    AuthService.prototype.loginWithGoogle = function (accessToken, deviceId, deviceName) {
-        var endPoint = src_environments_environment__WEBPACK_IMPORTED_MODULE_2__["environment"].apiEndPoint + '/Account/login/google';
-        var request = {
-            token: accessToken,
-            deviceId: deviceId,
-            deviceName: deviceName
-        };
-        return this.http.http.post(endPoint, request);
-    };
-    AuthService.ctorParameters = function () { return [
-        { type: src_app_providers_http_http__WEBPACK_IMPORTED_MODULE_3__["HttpProvider"] }
-    ]; };
-    AuthService = tslib__WEBPACK_IMPORTED_MODULE_0__["__decorate"]([
-        Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["Injectable"])({
-            providedIn: 'root'
-        }),
-        tslib__WEBPACK_IMPORTED_MODULE_0__["__metadata"]("design:paramtypes", [src_app_providers_http_http__WEBPACK_IMPORTED_MODULE_3__["HttpProvider"]])
-    ], AuthService);
-    return AuthService;
 }());
 
 

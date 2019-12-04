@@ -4,17 +4,35 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { HttpProvider } from 'src/app/providers/http/http';
 import { TokenResponse } from 'src/app/viewmodels/token-response';
-import { HttpWrapperService } from '../http-wrapper.service'
 import { map, catchError } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { HttpWrapperService } from '../http-wrapper/http-wrapper.service';
+import { ErrorService } from '../error/error.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  constructor(private http: HttpWrapperService) {}
+  constructor(
+    private http: HttpWrapperService,
+    private error: ErrorService,
+  ) {}
 
+    // API End Point /Account/login/google (We should remove Redundant Calls If Required)
+    login(username, password) {
+      const endPoint = environment.apiEndPoint + '/Account/login';
+      const request = {
+        username: username,
+        password: password
+      };
+      return this.http.post(endPoint, request).pipe(
+        map((res: any) => {
+          return res;
+        }),
+        catchError(this.error.handleError<any>(`Failed to login`))
+      );
+    }
 
   // API End Point /Account/login/facebook
 
@@ -26,7 +44,6 @@ export class AuthService {
       deviceName: deviceName
 
     };
-
   }
 
     // API End Point /Account/login/google (We should remove Redundant Calls If Required)
@@ -36,10 +53,7 @@ export class AuthService {
         token: accessToken,
         deviceId: deviceId,
         deviceName: deviceName
-
       };
-
-    
     }
 
 

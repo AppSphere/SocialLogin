@@ -1,0 +1,54 @@
+{
+  "prepare_queue": {
+    "installed": [],
+    "uninstalled": []
+  },
+  "config_munge": {
+    "files": {}
+  },
+  "installed_plugins": {
+    "cordova-plugin-advanced-http": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-device": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-facebook4": {
+      "APP_ID": "2370956366547686",
+      "APP_NAME": "Social Login",
+      "FACEBOOK_HYBRID_APP_EVENTS": "false",
+      "FACEBOOK_ANDROID_SDK_VERSION": "5.5.2",
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-googleplus": {
+      "WEB_APPLICATION_CLIENT_ID": "569570407894-nc1s9htm078htkhj4vcdv7iqae8q0daq.apps.googleusercontent.com",
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-inappbrowser": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-ionic-keyboard": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-ionic-webview": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-linkedin": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-splashscreen": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-statusbar": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    },
+    "cordova-plugin-whitelist": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    }
+  },
+  "dependent_plugins": {
+    "cordova-plugin-file": {
+      "PACKAGE_NAME": "io.ionic.starter.googlelogin"
+    }
+  }
+}

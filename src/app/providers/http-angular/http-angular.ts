@@ -17,7 +17,6 @@ export class HttpAngularProvider {
 
         const body = this.createSearchParams(params);
 
-        debugger;
         return this.http.post(url, body.toString(), options).toPromise();
     }
 

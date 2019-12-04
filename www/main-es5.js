@@ -447,7 +447,7 @@ module.exports = webpackAsyncContext;
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "<ion-app>\n  <ion-router-outlet></ion-router-outlet>\n</ion-app>\n"
+module.exports = "<ion-app>\r\n  <ion-router-outlet></ion-router-outlet>\r\n</ion-app>\r\n"
 
 /***/ }),
 
@@ -470,15 +470,23 @@ __webpack_require__.r(__webpack_exports__);
 var routes = [
     {
         path: '',
-        loadChildren: function () { return __webpack_require__.e(/*! import() | tabs-tabs-module */ "tabs-tabs-module").then(__webpack_require__.bind(null, /*! ./tabs/tabs.module */ "./src/app/tabs/tabs.module.ts")).then(function (m) { return m.TabsPageModule; }); }
+        loadChildren: function () { return Promise.all(/*! import() | pages-login-login-module */[__webpack_require__.e("common"), __webpack_require__.e("pages-login-login-module")]).then(__webpack_require__.bind(null, /*! ./pages/login/login.module */ "./src/app/pages/login/login.module.ts")).then(function (m) { return m.LoginPageModule; }); }
     },
     {
         path: 'login',
-        loadChildren: function () { return __webpack_require__.e(/*! import() | pages-login-login-module */ "pages-login-login-module").then(__webpack_require__.bind(null, /*! ./pages/login/login.module */ "./src/app/pages/login/login.module.ts")).then(function (m) { return m.LoginPageModule; }); }
+        loadChildren: function () { return Promise.all(/*! import() | pages-login-login-module */[__webpack_require__.e("common"), __webpack_require__.e("pages-login-login-module")]).then(__webpack_require__.bind(null, /*! ./pages/login/login.module */ "./src/app/pages/login/login.module.ts")).then(function (m) { return m.LoginPageModule; }); }
     },
     {
         path: 'tabs',
         loadChildren: function () { return __webpack_require__.e(/*! import() | tabs-tabs-module */ "tabs-tabs-module").then(__webpack_require__.bind(null, /*! ./tabs/tabs.module */ "./src/app/tabs/tabs.module.ts")).then(function (m) { return m.TabsPageModule; }); }
+    },
+    {
+        path: 'register',
+        loadChildren: function () { return Promise.all(/*! import() | pages-register-register-module */[__webpack_require__.e("common"), __webpack_require__.e("pages-register-register-module")]).then(__webpack_require__.bind(null, /*! ./pages/register/register.module */ "./src/app/pages/register/register.module.ts")).then(function (m) { return m.RegisterPageModule; }); }
+    },
+    {
+        path: 'reset-password',
+        loadChildren: function () { return Promise.all(/*! import() | pages-reset-password-reset-password-module */[__webpack_require__.e("common"), __webpack_require__.e("pages-reset-password-reset-password-module")]).then(__webpack_require__.bind(null, /*! ./pages/reset-password/reset-password.module */ "./src/app/pages/reset-password/reset-password.module.ts")).then(function (m) { return m.ResetPasswordPageModule; }); }
     },
 ];
 var AppRoutingModule = /** @class */ (function () {
@@ -570,11 +578,12 @@ var AppComponent = /** @class */ (function () {
 /*!*******************************!*\
   !*** ./src/app/app.module.ts ***!
   \*******************************/
-/*! exports provided: AppModule */
+/*! exports provided: provideConfig, AppModule */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "provideConfig", function() { return provideConfig; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AppModule", function() { return AppModule; });
 /* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "./node_modules/tslib/tslib.es6.js");
 /* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
@@ -623,6 +632,9 @@ var config = new angular4_social_login__WEBPACK_IMPORTED_MODULE_15__["AuthServic
         provider: new angular4_social_login__WEBPACK_IMPORTED_MODULE_15__["FacebookLoginProvider"]("2370956366547686")
     }
 ]);
+function provideConfig() {
+    return config;
+}
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -630,7 +642,7 @@ var AppModule = /** @class */ (function () {
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_1__["NgModule"])({
             declarations: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]],
             entryComponents: [],
-            imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"].forRoot(), angular4_social_login__WEBPACK_IMPORTED_MODULE_15__["SocialLoginModule"].initialize(config), _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HttpClientModule"]],
+            imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_2__["BrowserModule"], _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicModule"].forRoot(), angular4_social_login__WEBPACK_IMPORTED_MODULE_15__["SocialLoginModule"], _app_routing_module__WEBPACK_IMPORTED_MODULE_7__["AppRoutingModule"], _angular_http__WEBPACK_IMPORTED_MODULE_10__["HttpModule"], _angular_common_http__WEBPACK_IMPORTED_MODULE_14__["HttpClientModule"]],
             providers: [
                 _ionic_native_status_bar_ngx__WEBPACK_IMPORTED_MODULE_6__["StatusBar"],
                 _ionic_native_splash_screen_ngx__WEBPACK_IMPORTED_MODULE_5__["SplashScreen"],
@@ -641,7 +653,14 @@ var AppModule = /** @class */ (function () {
                 _ionic_native_facebook_ngx__WEBPACK_IMPORTED_MODULE_17__["Facebook"],
                 _providers_http_angular_http_angular__WEBPACK_IMPORTED_MODULE_12__["HttpAngularProvider"],
                 _providers_http_native_http_native__WEBPACK_IMPORTED_MODULE_13__["HttpNativeProvider"],
-                { provide: _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouteReuseStrategy"], useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicRouteStrategy"] }
+                {
+                    provide: _angular_router__WEBPACK_IMPORTED_MODULE_3__["RouteReuseStrategy"],
+                    useClass: _ionic_angular__WEBPACK_IMPORTED_MODULE_4__["IonicRouteStrategy"]
+                },
+                {
+                    provide: angular4_social_login__WEBPACK_IMPORTED_MODULE_15__["AuthServiceConfig"],
+                    useFactory: provideConfig
+                }
             ],
             bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_8__["AppComponent"]]
         })
@@ -683,7 +702,6 @@ var HttpAngularProvider = /** @class */ (function () {
         // options.withCredentials = true;
         if (options === void 0) { options = {}; }
         var body = this.createSearchParams(params);
-        debugger;
         return this.http.post(url, body.toString(), options).toPromise();
     };
     HttpAngularProvider.prototype.createSearchParams = function (params) {
@@ -782,7 +800,6 @@ var HttpProvider = /** @class */ (function () {
         this.platform = platform;
         this.angularHttp = angularHttp;
         this.nativeHttp = nativeHttp;
-        debugger;
         this.http = this.platform.is('ios') || this.platform.is('android') ? nativeHttp : angularHttp;
     }
     HttpProvider.ctorParameters = function () { return [
@@ -818,7 +835,8 @@ var environment = {
     production: false,
     linkedinClientId: '860knhygub0ys2',
     linkedinClientSecret: 'FyMOinXzjOYsUN87',
-    apiEndPoint: 'http://ec2-54-162-112-13.compute-1.amazonaws.com'
+    apiEndPoint: 'http://api.weeyacom.com'
+    // apiEndPoint: 'http://ec2-54-162-112-13.compute-1.amazonaws.com'
 };
 /*
  * For easier debugging in development mode, you can import the following file
@@ -865,7 +883,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! /Users/apple/Documents/github/results-framework-ionic-master/src/main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! Z:\BroermanTechnologiesLLC\Projects\repos\resultsframework\appsphere\src\main.ts */"./src/main.ts");
 
 
 /***/ })
