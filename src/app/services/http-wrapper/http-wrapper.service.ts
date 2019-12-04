@@ -16,7 +16,7 @@ export class HttpWrapperService {
     public get = (url: string, params?: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
         options.params = params;
-        return of(this.http.get(url, options)).pipe(tap((res) => {
+        return of(this.http.get(url)).pipe(tap((res) => {
             this.hideLoader();
         }), finalize(() => {
             this.hideLoader();
@@ -25,8 +25,9 @@ export class HttpWrapperService {
 
     public post = (url: string, body: any, options?: any): Observable<any> => {
         options = this.prepareOptions(options);
+        // this.http.setHeader(environment.apiEndPoint, 'Content-Type', 'application/json');
 
-        return this.http.post(url, body, options).pipe(tap((res) => {
+        return this.http.post(url, body, {}).pipe(tap((res) => {
             // this.hideLoader();
         }), finalize(() => {
             // this.hideLoader();

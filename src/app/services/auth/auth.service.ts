@@ -1,5 +1,5 @@
-import { HttpHeaders, HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
+import {HttpHeaders, HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
 
 import { environment } from 'src/environments/environment';
 import { HttpProvider } from 'src/app/providers/http/http';
@@ -10,7 +10,7 @@ import { HttpWrapperService } from '../http-wrapper/http-wrapper.service';
 import { ErrorService } from '../error/error.service';
 
 @Injectable({
-  providedIn: 'root'
+    providedIn: 'root'
 })
 export class AuthService {
 
@@ -34,14 +34,14 @@ export class AuthService {
       );
     }
 
-  // API End Point /Account/login/facebook
+    // API End Point /Account/login/facebook
 
-  loginWithFacebook(accessToken, deviceId, deviceName) {
-    const endPoint = environment.apiEndPoint + '/Account/login/facebook';
-    const request = {
-      token: accessToken,
-      deviceId: deviceId,
-      deviceName: deviceName
+    loginWithFacebook(accessToken, deviceId, deviceName) {
+        const endPoint = environment.apiEndPoint + '/Account/login/facebook';
+        const request = {
+            token: accessToken,
+            deviceId: deviceId,
+            deviceName: deviceName
 
     };
   }
@@ -57,19 +57,18 @@ export class AuthService {
     }
 
 
-
     // API End Point /Account/login/google (We should remove Redundant Calls If Required)
     register(formData) {
-      const endPoint = environment.apiEndPoint + '/Account/Create';
+        const endPoint = environment.apiEndPoint + '/Account/Create';
 
-      return this.http.post(endPoint, formData).pipe(
-        map((res: TokenResponse) => {
-          return res;
-        }),
-        catchError((err) => {
-               return of(err);
-        })
-      );
+        return this.http.post(endPoint, formData).pipe(
+            map((res: TokenResponse) => {
+                return res;
+            }),
+            catchError((err) => {
+                return of(err);
+            })
+        );
     }
 
 
