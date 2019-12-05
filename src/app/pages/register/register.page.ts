@@ -108,8 +108,13 @@ export class RegisterPage implements OnInit {
             acceptsMarketingEmail: form.IsMarketingEmailsAllowed
         };
         this.authService.register(request).subscribe((res) => {
-            this.loading.dismiss();
-            this.router.navigateByUrl('tabs');
+            if (res && res.error) {
+                this.loading.dismiss();
+                alert(res.error.errorMessage);
+            } else {
+                this.loading.dismiss();
+                this.router.navigateByUrl('tabs/tab1');
+            }
         });
     }
 

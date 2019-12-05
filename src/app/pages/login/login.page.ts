@@ -4,11 +4,16 @@ import { LinkedIn } from 'ng2-cordova-oauth/core';
 import { environment } from 'src/environments/environment';
 import { OauthBrowser } from 'ng2-cordova-oauth/platform/browser';
 import { LinkedinService } from 'src/app/services/linkedin/linkedin.service';
-import { AuthService, SocialUser, GoogleLoginProvider, FacebookLoginProvider } from 'angular4-social-login';
+
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Facebook, FacebookLoginResponse } from '@ionic-native/facebook/ngx';
-import {AuthService as LocalAuthService} from 'src/app/services/auth/auth.service';
-import {Validators, FormBuilder, FormGroup, FormControl} from '@angular/forms';
+import { AuthService as LocalAuthService } from 'src/app/services/auth/auth.service';
+import { Validators, FormBuilder, FormGroup, FormControl } from '@angular/forms';
+
+import { AuthService } from 'angularx-social-login';
+import { FacebookLoginProvider, GoogleLoginProvider } from 'angularx-social-login';
+import { SocialUser } from 'angularx-social-login';
+import {OauthCordova} from 'ng2-cordova-oauth/platform/cordova';
 
 
 
@@ -34,6 +39,7 @@ export class LoginPage implements OnInit {
     private fb: Facebook,
     private localAuthService: LocalAuthService,
     public formBuilder: FormBuilder,
+    private authService: AuthService
 
   ) { }
 
@@ -49,7 +55,7 @@ export class LoginPage implements OnInit {
       ])),
     });
 
-    
+
     this.validationMessages = {
       username: [
           {type: 'required', message: 'Username is required.'},
@@ -104,16 +110,16 @@ export class LoginPage implements OnInit {
       responseType: 'code',
       state: this.linkedinService.getRandomState()
     });
-    const oauth = new OauthBrowser();
+    const oauth = new OauthCordova();
 
     this.platform.ready().then(() => {
       oauth
         .logInVia(provider)
         .then(success => {
-
-          this.linkedinService.getAccessToken(success['code'])
+          console.log(JSON.stringify(success));
+          this.linkedinService.getAccessToken(success["code"])
             .then(data => {
-              alert('data' + data);
+              console.log(data);
             });
 
         })
@@ -134,30 +140,54 @@ export class LoginPage implements OnInit {
 
   // AP --- Google Login
   signInWithGoogle() {
-    this.googlePlus.login({})
-      .then(res => {
-        //this.localAuthService.loginWithFacebook(res.accessToken, 'Device1', 'Device2');
-        this.navCtrl.navigateForward('tabs');
-       })
-      .catch(err => console.error(err));
+
+    if (!this.platform.is('cordova')) {
+
+      this.authService.signIn(GoogleLoginProvider.PROVIDER_ID).then(res => {
+          console.log(res);
+          this.navCtrl.navigateForward('tabs/tab1');
+
+      }).catch(err => { console.log(err); });
+
+    } else {
+        this.googlePlus.login({})
+        .then(res => {
+            this.navCtrl.navigateForward('tabs/tab1');
+        })
+        .catch(err => console.error(err));
+      }
 
   }
 
   // AP --- Facebook Login
   signInWithFB() {
+
+    if (!this.platform.is('cordova')) {
+        this.authService.signIn(FacebookLoginProvider.PROVIDER_ID).then(res => {
+          console.log(res);
+          this.navCtrl.navigateForward('tabs/tab1');
+
+        });
+    } else {
     this.fb.login(['public_profile', 'user_friends', 'email'])
       .then((res: FacebookLoginResponse) => {
-        this.navCtrl.navigateForward('tabs');
-          //this.localAuthService.loginWithFacebook(res.authResponse.accessToken, 'Device1', 'Device2');
+        this.navCtrl.navigateForward('tabs/tab1');
       })
       .catch(e => console.log('Error logging into Facebook', e));
+    }
   }
-  
+
   signOut(): void {
     //
+    if (!this.platform.is('cordova')) {
     this.googlePlus.logout();
     this.fb.logout();
+    } else {
+      this.auth.signOut();
+      localStorage.clear();
+    }
+
     this.navCtrl.navigateForward('login');
-    //this.auth.signOut();
+
   }
 }

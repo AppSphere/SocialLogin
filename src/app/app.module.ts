@@ -14,19 +14,20 @@ import { HttpProvider } from './providers/http/http';
 import { HttpAngularProvider } from './providers/http-angular/http-angular';
 import { HttpNativeProvider } from './providers/http-native/http-native';
 import { HttpClientModule } from '@angular/common/http';
-import { SocialLoginModule, AuthServiceConfig, GoogleLoginProvider, FacebookLoginProvider } from 'angular4-social-login';
 import { GooglePlus } from '@ionic-native/google-plus/ngx';
 import { Facebook } from '@ionic-native/facebook/ngx';
+import { SocialLoginModule, AuthServiceConfig } from 'angularx-social-login';
+import { GoogleLoginProvider, FacebookLoginProvider } from 'angularx-social-login';
+import { CookieService } from 'ngx-cookie-service';
 
-
-let config = new AuthServiceConfig([
+const config = new AuthServiceConfig([
   {
     id: GoogleLoginProvider.PROVIDER_ID,
-    provider: new GoogleLoginProvider("569570407894-n26tlvmrtmraafrqfljkcsf31mf7pq16.apps.googleusercontent.com")
+    provider: new GoogleLoginProvider('569570407894-n26tlvmrtmraafrqfljkcsf31mf7pq16.apps.googleusercontent.com')
   },
   {
     id: FacebookLoginProvider.PROVIDER_ID,
-    provider: new FacebookLoginProvider("2370956366547686")
+    provider: new FacebookLoginProvider('2370956366547686')
   }
 ]);
 
@@ -46,6 +47,7 @@ export function provideConfig() {
     HttpProvider,
     GooglePlus,
     Facebook,
+    CookieService,
     HttpAngularProvider,
     HttpNativeProvider,
     {
